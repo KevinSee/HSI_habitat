@@ -248,6 +248,8 @@ for(spp in c('Chinook', 'Steelhead')) {
       geom_rug(data = rug_df, aes(x = value, y=NULL, color = WatershedName)) +
       scale_color_brewer(palette = 'Set1') +
       facet_wrap(~ covar_label, scales = 'free') +
+      theme(legend.position = 'bottom') +
+      guides(color = guide_legend(nrow = 2)) +
       labs(y = 'HSI Capacity', x = 'Covariate Value', title = 'Partial Dependence Plots')
     # pdp_p
     

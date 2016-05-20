@@ -1,0 +1,124 @@
+---
+title: "Methods"
+author: "Kevin See"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  html_document:
+    fig_caption: yes
+    fig_height: 7
+    fig_width: 7
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+bibliography:
+- /Users/kevin/Documents/Bibliography/Research.bib
+- /Users/kevin/Documents/Bibliography/SoftwareCitations.bib
+---
+
+```{r intro_prep, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(knitr)
+library(captioner)
+opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+
+library(ggplot2)
+library(randomForest)
+
+theme_set(theme_bw())
+```
+
+### Authors
+__Kevin See__  
+_Biometrician_
+_Quantitative Consultants Inc._
+_Boise, ID_
+_Kevin@qcinc.org_
+
+__Sara Bangen__  
+_Researcher - Fluvial Habitat Analyst_
+_Watershed Sciences Department_
+_Utah State University_
+_sara.bangen@gmail.com_
+
+### Collaborators
+__ELR__  
+_Nick Bouwes_
+
+***
+
+# Goals
+
+The purpose of this analysis was to compare estimates of capacity from habitat suitability indices (HSI) with specific habitat metrics at the reach scale. Habitat data comes from the [CHaMP](https://www.champmonitoring.org/) database. Sara Bangen provided the HSI estimates of capacity for Chinook and steelhead juveniles and spawners at specific CHaMP sites. The following results are from four separate analyses, one for each combination of species and lifestage.
+
+# Methods
+
+## Determine list of habitat covariates
+
+Because CHaMP generates so many habitat metrics, many of which are highly correlated, we generated a list of potential covariates for each analysis. To do so, we grouped the CHaMP metrics into broad categories (e.g. substrate, riparian, water quality, wood, etc.). We then calculated the association between each metric and the HSI estimate of capacity using the maximal information coefficient (MIC). MIC captures the strength of an association between two variables even if that association is non-linear [@Reshef2011]. The metric with the highest MIC score within each category was selected for inclusion in the analysis
+
+## Random Forest
+
+We then fit a random forest model with the capacity term as the response and the selected habitat metrics as the covariates. Any data point with more than three missing covariates was dropped from the analysis. The remaining missing data was imputed using the missForest package [@Stekhoven2012, @Stekhoven2013]. At this point, a random forest model was fit using the randomForest package [@Liaw2002]. 
+
+# Results
+
+## Chinook 
+
+### Juveniles
+
+```{r chnk_juv}
+load('ModelFits/Chinook_Juvenile_model.rda')
+print(imp_p)
+
+print(pdp_p)
+
+print(obs_pred_p1)
+
+print(obs_pred_p2)
+```
+
+
+### Spawners
+
+```{r chnk_spawn}
+load('ModelFits/Chinook_Spawner_model.rda')
+print(imp_p)
+
+print(pdp_p)
+
+print(obs_pred_p1)
+
+print(obs_pred_p2)
+```
+
+## Steelhead 
+
+### Juveniles
+
+```{r sthd_juv}
+load('ModelFits/Steelhead_Juvenile_model.rda')
+print(imp_p)
+
+print(pdp_p)
+
+print(obs_pred_p1)
+
+print(obs_pred_p2)
+```
+
+
+### Spawners
+
+```{r sthd_spawn}
+load('ModelFits/Steelhead_Spawner_model.rda')
+print(imp_p)
+
+print(pdp_p)
+
+print(obs_pred_p1)
+
+print(obs_pred_p2)
+```
+
+
+# References

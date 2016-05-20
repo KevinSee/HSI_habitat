@@ -264,6 +264,7 @@ for(spp in c('Chinook', 'Steelhead')) {
     # with(obs_pred_df, cor(obs, pred))^2
     # summary(lm(pred ~ obs, obs_pred_df))$r.squared
     # summary(lm(pred ~ obs, obs_pred_df))$adj.r.squared
+    # summary(lm(log(pred) ~ log(obs), obs_pred_df))$adj.r.squared
     
     # plot
     obs_pred_p1 = ggplot(obs_pred_df,

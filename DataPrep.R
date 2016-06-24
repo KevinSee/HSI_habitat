@@ -11,7 +11,8 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(lubridate)
-
+# library(WriteXLS)
+library(readxl)
 
 #-----------------------------------------------------------------
 # get HSI estimates
@@ -21,23 +22,32 @@ hsi_data = read_csv('Data/capacityEstimates_fuzzyHSI.csv',
 xtabs(~ Lifestage + Species, hsi_data)
 
 #-----------------------------------------------------------------
-# get CHaMP habitat data
-download.date = '20150916'
+# get CHaMP habitat data, data dictionary. Then write it to a file in this directory
+## only run once ##
+# download.date = '20150916'
+# 
+# cm_data = left_join(inner_join(x = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/MetricAndCovariates.csv')), 
+#                                y = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/MetricVisitInformation.csv'))),
+#                     read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/StreamTempSummer7dAM.csv'))) %>% 
+#   tbl_df %>%
+#   mutate(SampleDate = ymd_hms(SampleDate)) %>%
+#   arrange(SiteName, VisitYear, SampleDate)
+# 
+# table(hsi_data$VisitID %in% cm_data$VisitID)
+# 
+# # data dictionary
+# hab_dict = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/Definitions.csv')) %>% tbl_df()
+# 
+# 
+# WriteXLS(c('cm_data', 'hab_dict'),
+#          'Data/CHaMP_data.xlsx',
+#          SheetNames = c('CHaMP_data', 'data_dictionary'))
 
-cm_data = left_join(inner_join(x = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/MetricAndCovariates.csv')), 
-                               y = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/MetricVisitInformation.csv'))),
-                    read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/StreamTempSummer7dAM.csv'))) %>% 
-  tbl_df %>%
-  mutate(SampleDate = ymd_hms(SampleDate)) %>%
-  arrange(SiteName, VisitYear, SampleDate)
 
-table(hsi_data$VisitID %in% cm_data$VisitID)
-
-
-
-# data dictionary
-hab_dict = read.csv(paste0('/Users/kevin/Dropbox/ISEMP/Data/Habitat/CHaMP/CMorg/CHaMP_ProgramMetrics_', download.date, '/Definitions.csv')) %>% tbl_df()
-
+#-----------------------------------------------------------------
+# get CHaMP habitat data and data dictionary
+cm_data = read_excel('Data/CHaMP_data.xlsx', 1)
+hab_dict = read_excel('Data/CHaMP_data.xlsx', 2)
 
 #-----------------------------------------------------------------
 # combine HSI and habitat data
